@@ -1330,15 +1330,17 @@ const App = {
 
   setTTS(on) {
     this.ttsOn = on;
-    document.getElementById('s-tts-on').classList.toggle('active', on);
-    document.getElementById('s-tts-off').classList.toggle('active', !on);
+    document.getElementById('tts-on')?.classList.toggle('picked', on);
+    document.getElementById('tts-off')?.classList.toggle('picked', !on);
+    document.getElementById('cur-voice').textContent = on ? '켜짐' : '꺼짐';
     if (!on) window.speechSynthesis.cancel();
   },
 
   setGesture(on) {
     this.gestureOn = on;
-    document.getElementById('s-gest-on').classList.toggle('active', on);
-    document.getElementById('s-gest-off').classList.toggle('active', !on);
+    document.getElementById('gesture-on')?.classList.toggle('picked', on);
+    document.getElementById('gesture-off')?.classList.toggle('picked', !on);
+    document.getElementById('cur-gesture').textContent = on ? '켜짐' : '꺼짐';
     this.toast(on ? '✋ 제스처 켜짐' : '✋ 제스처 꺼짐');
   },
 
