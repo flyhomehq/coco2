@@ -149,17 +149,51 @@ body{font-family:'Noto Sans KR',sans-serif;background:#050a14;color:#fff;overflo
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.75;transform:scale(0.97)}}
 #pause-hint{margin-top:12px;font-size:clamp(13px,2.5vw,18px);font-weight:700;color:#FFD700;background:rgba(245,166,35,0.14);border:1.5px solid rgba(245,166,35,0.45);border-radius:13px;padding:9px 22px}
 
-/* 설정 */
-#settings-panel{position:fixed;inset:0;z-index:180;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,0.65)}
-#settings-panel.open{display:flex}
-#settings-inner{background:rgba(5,10,28,0.99);border-radius:24px 24px 0 0;width:100%;max-width:480px;max-height:80vh;overflow-y:auto;padding:18px 18px 30px;border-top:1.5px solid rgba(255,255,255,0.1)}
-.s-title{font-size:15px;font-weight:700;color:#F5A623;margin-bottom:14px;text-align:center}
-.s-item{background:rgba(255,255,255,0.04);border-radius:13px;padding:12px;margin-bottom:10px}
-.s-label{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:7px}
-.s-row{display:flex;gap:7px;flex-wrap:wrap}
-.s-btn{padding:7px 13px;border-radius:9px;font-size:12px;font-weight:600;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);color:#fff;cursor:pointer;font-family:inherit;touch-action:manipulation}
-.s-btn.active{background:rgba(245,166,35,0.22);border-color:#F5A623;color:#F5A623}
-.s-close{width:100%;margin-top:10px;background:none;border:1px solid rgba(255,255,255,0.18);border-radius:13px;color:rgba(255,255,255,0.5);font-size:14px;padding:11px;cursor:pointer;font-family:inherit}
+/* 설정 패널 */
+.panel{position:fixed;inset:0;background:rgba(4,8,18,0.97);z-index:200;display:none;flex-direction:column;overflow:hidden}
+.panel.open{display:flex}
+.panel-scroll{flex:1;overflow-y:auto;padding:20px}
+.phdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.ptitle{font-size:19px;font-weight:700;color:#F5A623}
+.pclose{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;color:#fff;font-size:14px;padding:6px 14px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;touch-action:manipulation;position:relative;z-index:999;min-width:60px;min-height:44px}
+.acc-section{border:1px solid rgba(255,255,255,0.1);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.acc-header{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;cursor:pointer;background:rgba(255,255,255,0.04);touch-action:manipulation}
+.acc-title{font-size:14px;font-weight:600;color:#fff}
+.acc-current{font-size:13px;color:#F5A623}
+.acc-arrow{font-size:15px;color:rgba(255,255,255,0.4);transition:transform 0.2s}
+.acc-section.open .acc-arrow{transform:rotate(180deg)}
+.acc-body{display:none;padding:8px 10px 10px;background:rgba(0,0,0,0.2)}
+.acc-section.open .acc-body{display:block}
+.sel-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 13px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:10px;touch-action:manipulation}
+.sel-card:last-child{margin-bottom:0}
+.sel-card.picked{background:rgba(245,166,35,0.12);border-color:rgba(245,166,35,0.5)}
+.sel-radio{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.sel-card.picked .sel-radio{border-color:#F5A623;background:#F5A623}
+.sel-dot{width:6px;height:6px;border-radius:50%;background:#1a0a00;display:none}
+.sel-card.picked .sel-dot{display:block}
+.sel-name{font-size:13px;font-weight:600;color:#fff}
+.host-section{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:13px 15px;margin-bottom:10px}
+.host-section-title{font-size:14px;font-weight:700;color:#F5A623;margin-bottom:8px}
+.host-btn{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#fff;font-family:'Noto Sans KR',sans-serif;font-size:13px;padding:9px 14px;cursor:pointer;width:100%;text-align:left;margin-bottom:6px;display:flex;align-items:center;gap:8px;touch-action:manipulation}
+.host-btn .icon{font-size:15px}
+.host-btn .label{flex:1}
+.host-btn .tag{font-size:10px;color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.07);border-radius:8px;padding:2px 7px}
+/* API 키 잠금 */
+.api-locked #api-key-input{pointer-events:none;opacity:0.4;filter:blur(2px)}
+.api-locked #api-save-btn{pointer-events:none;opacity:0.4}
+.api-lock-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:8px;cursor:pointer;touch-action:manipulation;font-family:'Noto Sans KR',sans-serif}
+.api-lock-badge.locked{background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.5);color:#f87171}
+.api-lock-badge.unlocked{background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.4);color:#4ade80}
+/* 잠금 해제 모달 */
+#lock-modal{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center}
+#lock-modal.open{display:flex}
+#lock-modal-inner{background:rgba(10,15,35,0.99);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:24px;width:280px;text-align:center}
+#lock-modal-inner h3{font-size:15px;font-weight:700;color:#F5A623;margin-bottom:14px}
+#lock-pin-input{width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:10px;color:#fff;padding:10px;font-size:18px;text-align:center;letter-spacing:6px;font-family:monospace;outline:none;margin-bottom:10px}
+#lock-pin-error{font-size:11px;color:#f87171;min-height:16px;margin-bottom:8px}
+.lock-modal-btn{width:100%;padding:10px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;touch-action:manipulation;margin-bottom:6px}
+.lock-modal-btn.confirm{background:rgba(245,166,35,0.3);border:1px solid rgba(245,166,35,0.6);color:#FFD060}
+.lock-modal-btn.cancel{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.5)}
 
 /* 안내 */
 #guide-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.93);display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px}
@@ -367,23 +401,116 @@ body{font-family:'Noto Sans KR',sans-serif;background:#050a14;color:#fff;overflo
 </div>
 
 <!-- 설정 -->
-<div id="settings-panel" onclick="this.classList.remove('open')">
-  <div id="settings-inner" onclick="event.stopPropagation()">
-    <div class="s-title">⚙ 설정</div>
-    <div class="s-item"><div class="s-label" id="s-tts-lbl">🔊 음성 안내</div><div class="s-row"><button class="s-btn active" id="s-tts-on" onclick="App.setTTS(true)">켜짐</button><button class="s-btn" id="s-tts-off" onclick="App.setTTS(false)">꺼짐</button></div></div>
-    <div class="s-item"><div class="s-label" id="s-gest-lbl">✋ 제스처 인식</div><div class="s-row"><button class="s-btn active" id="s-gest-on" onclick="App.setGesture(true)">켜짐</button><button class="s-btn" id="s-gest-off" onclick="App.setGesture(false)">꺼짐</button></div></div>
-    <div class="s-item">
-      <div class="s-label">🔑 API 키 (Anthropic)</div>
-      <div style="display:flex;gap:6px;margin-top:4px">
-        <input id="api-key-input" type="password" placeholder="sk-ant-api03-..." style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.16);border-radius:8px;color:#fff;padding:7px 9px;font-size:12px;font-family:monospace;outline:none">
-        <button onclick="App.saveApiKey()" style="background:rgba(245,166,35,0.22);border:1px solid rgba(245,166,35,0.5);border-radius:8px;color:#FFD060;font-size:12px;font-weight:700;padding:7px 11px;cursor:pointer;font-family:inherit">저장</button>
+<!-- 설정 패널 -->
+  <div id="settings-panel" class="panel">
+    <div class="panel-scroll">
+      <div class="phdr"><span class="ptitle">⚙ 설정</span><button class="pclose" data-action="close-settings">닫기</button></div>
+      <!-- 공유/QR/라운지 버튼 행 -->
+      <div class="host-section" style="display:flex;gap:8px;padding:8px 0;flex-wrap:wrap">
+        <button class="host-btn" data-action="share-app" style="flex:1;min-width:80px">
+          <span class="icon">🔗</span><span class="label">공유하기</span>
+        </button>
+        <button class="host-btn" data-action="show-qr" style="flex:1;min-width:80px">
+          <span class="icon">📲</span><span class="label">QR코드</span>
+        </button>
+        <button class="host-btn" data-action="open-lounge" style="flex:1;min-width:80px">
+          <span class="icon">☕</span><span class="label">Lounge</span>
+        </button>
       </div>
-      <div style="font-size:10px;color:rgba(255,255,255,0.22);margin-top:4px">이 기기에만 저장됩니다</div>
+      <div class="acc-section open" id="acc-lang">
+        <div class="acc-header" data-action="toggle-acc" data-acc="acc-lang"><span class="acc-title">🌐 언어</span><span style="display:flex;align-items:center;gap:6px"><span class="acc-current" id="cur-lang">한국어</span><span class="acc-arrow">▾</span></span></div>
+        <div class="acc-body">
+          <div class="sel-card picked" id="lang-ko" data-action="set-lang" data-lang="ko"><div class="sel-radio"><div class="sel-dot"></div></div><div class="sel-name">🇰🇷 한국어</div></div>
+          <div class="sel-card" id="lang-en" data-action="set-lang" data-lang="en"><div class="sel-radio"><div class="sel-dot"></div></div><div class="sel-name">🇺🇸 English</div></div>
+          <div class="sel-card" id="lang-ja" data-action="set-lang" data-lang="ja"><div class="sel-radio"><div class="sel-dot"></div></div><div class="sel-name">🇯🇵 日本語</div></div>
+          <div class="sel-card" id="lang-zh" data-action="set-lang" data-lang="zh"><div class="sel-radio"><div class="sel-dot"></div></div><div class="sel-name">🇨🇳 中文</div></div>
+        </div>
+      </div>
+      <div class="acc-section" id="acc-voice">
+        <div class="acc-header" data-action="toggle-acc" data-acc="acc-voice"><span class="acc-title">🔊 음성(TTS)</span><span style="display:flex;align-items:center;gap:6px"><span class="acc-current" id="cur-voice">켜짐</span><span class="acc-arrow">▾</span></span></div>
+        <div class="acc-body">
+          <div class="sel-card picked" id="tts-on" data-action="voice-on"><div class="sel-radio"><div class="sel-dot"></div></div><div class="sel-name">켜짐</div></div>
+          <div class="sel-card" id="tts-off" data-action="voice-off"><div class="sel-radio"><div class="sel-dot"></div></div><div class="sel-name">꺼짐</div></div>
+        </div>
+      </div>
+      <!-- 마이크 설정 -->
+      <div class="acc-section" id="acc-mic">
+        <div class="acc-header" data-action="toggle-acc" data-acc="acc-mic"><span class="acc-title">🎤 마이크(음성인식)</span><span style="display:flex;align-items:center;gap:6px"><span class="acc-current" id="cur-mic">켜짐</span><span class="acc-arrow">▾</span></span></div>
+        <div class="acc-body">
+          <div class="sel-card picked" id="mic-on" data-action="mic-on"><div class="sel-radio"><div class="sel-dot"></div></div><div class="sel-name">켜짐</div></div>
+          <div class="sel-card" id="mic-off" data-action="mic-off"><div class="sel-radio"><div class="sel-dot"></div></div><div class="sel-name">꺼짐</div></div>
+          <div style="margin-top:8px;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px">
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:6px">마이크 표시창</div>
+            <div class="sel-card picked" id="mic-display-on" data-action="mic-display-on"><div class="sel-radio"><div class="sel-dot"></div></div><div class="sel-name">표시</div></div>
+            <div class="sel-card" id="mic-display-off" data-action="mic-display-off"><div class="sel-radio"><div class="sel-dot"></div></div><div class="sel-name">숨김</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- 제스처 설정 -->
+      <div class="acc-section" id="acc-gesture">
+        <div class="acc-header" data-action="toggle-acc" data-acc="acc-gesture"><span class="acc-title">✋ 제스처 인식</span><span style="display:flex;align-items:center;gap:6px"><span class="acc-current" id="cur-gesture">켜짐</span><span class="acc-arrow">▾</span></span></div>
+        <div class="acc-body">
+          <div class="sel-card picked" id="gesture-on" data-action="gesture-on"><div class="sel-radio"><div class="sel-dot"></div></div><div class="sel-name">켜짐 (주먹/보자기/가위)</div></div>
+          <div class="sel-card" id="gesture-off" data-action="gesture-off"><div class="sel-radio"><div class="sel-dot"></div></div><div class="sel-name">꺼짐 (CPU 절약)</div></div>
+        </div>
+      </div>
+      <!-- 호스트 모드 -->
+      <div style="margin-top:10px;padding:12px;background:rgba(100,60,0,0.15);border:1px solid rgba(245,166,35,0.2);border-radius:12px;cursor:pointer;touch-action:manipulation" data-action="open-host">
+        <div style="font-size:14px;font-weight:600;color:#F5A623;margin-bottom:2px">🎓 호스트 모드</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4)">시연 / 광고 설정</div>
+      </div>
+      <!-- AI 교관 설정 -->
+      <div style="margin-top:10px;padding:13px 15px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px">
+        <div style="font-size:14px;font-weight:700;color:#F5A623;margin-bottom:8px">🤖 AI 교관 음성 응답</div>
+        <button class="host-btn" id="qa-mode-btn" data-action="toggle-qa">
+          <span class="icon">🟢</span>
+          <span class="label" id="qa-mode-label">AI 교관 ON</span>
+        </button>
+        <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px">ON: 음성 질문에 AI가 즉석 답변 / OFF: AI 침묵</p>
+        <!-- API 키 입력창 — 잠금 기능 포함 -->
+        <div style="margin-top:10px;padding:10px;background:rgba(255,255,255,0.05);border-radius:10px" id="api-key-section">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <div style="font-size:11px;color:rgba(255,255,255,0.5)">🔑 API 키 <span id="api-key-status" style="color:#4ade80">미입력</span></div>
+            <span class="api-lock-badge locked" id="api-lock-badge" onclick="ApiLock.toggle()">🔒 잠김</span>
+          </div>
+          <div style="display:flex;gap:6px">
+            <input id="api-key-input" type="password" placeholder="sk-ant-api03-..."
+              style="flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;padding:6px 10px;font-size:11px;font-family:monospace;outline:none;min-width:0">
+            <button id="api-save-btn" data-action="save-api-key"
+              style="background:rgba(245,166,35,0.3);border:1px solid rgba(245,166,35,0.6);border-radius:8px;color:#FFD060;font-size:12px;font-weight:700;padding:6px 12px;cursor:pointer;touch-action:manipulation;white-space:nowrap">저장</button>
+          </div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:4px">이 기기 브라우저에만 저장됩니다. GitHub에 올라가지 않습니다.</div>
+        </div>
+      </div>
+      <!-- SimConnect -->
+      <div style="margin-top:10px;padding:13px 15px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px">
+        <div style="font-size:14px;font-weight:700;color:#F5A623;margin-bottom:8px">🔌 SimConnect <span style="font-size:10px;background:rgba(245,166,35,0.2);border:1px solid rgba(245,166,35,0.4);border-radius:8px;padding:2px 8px;color:#F5A623">v1.1</span></div>
+        <div id="simconnect-status" style="font-size:12px;color:rgba(255,255,255,0.4);padding:4px 0">⚪ v1.1에서 활성화 예정</div>
+        <div style="margin-top:10px">
+          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:6px">🛫 출발 공항 설정</div>
+          <select id="airport-select" onchange="AppController.setAirport(this.value)"
+            style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;padding:6px 10px;font-family:'Noto Sans KR',sans-serif;font-size:12px;cursor:pointer">
+            <option value="RKSI">인천국제공항 (RKSI)</option>
+            <option value="RKSS">김포국제공항 (RKSS)</option>
+            <option value="RKPC">제주국제공항 (RKPC)</option>
+            <option value="RKPK">김해국제공항 (RKPK)</option>
+          </select>
+        </div>
+      </div>
     </div>
-    <div class="s-item"><div class="s-label">🔌 SimConnect</div><div style="font-size:12px;color:rgba(255,255,255,0.28);margin-top:4px">준비 중 — 비행 시뮬레이터 연동</div></div>
-    <button class="s-close" onclick="document.getElementById('settings-panel').classList.remove('open')">닫기</button>
   </div>
-</div>
+
+  <!-- API 키 잠금 해제 모달 -->
+  <div id="lock-modal">
+    <div id="lock-modal-inner">
+      <h3>🔒 API 키 잠금 해제</h3>
+      <input id="lock-pin-input" type="password" maxlength="6" placeholder="• • • •" inputmode="numeric">
+      <div id="lock-pin-error"></div>
+      <button class="lock-modal-btn confirm" onclick="ApiLock.confirm()">확인</button>
+      <button class="lock-modal-btn cancel" onclick="ApiLock.closeModal()">취소</button>
+      <div style="font-size:10px;color:rgba(255,255,255,0.25);margin-top:8px">PIN을 잊으셨나요? localStorage 초기화 후 재설정 가능합니다.</div>
+    </div>
+  </div>
 
 <!-- 광고 -->
 <div id="ad-overlay">
@@ -1181,8 +1308,20 @@ const App = {
     document.getElementById('voice-box').classList.remove('show');
   },
 
+  closeSettings() {
+    document.getElementById('settings-panel').classList.remove('open');
+  },
+
   saveApiKey() {
     const k = document.getElementById('api-key-input').value.trim();
+    this.apiKey = k;
+    localStorage.setItem('cpos_api_key', k);
+    document.getElementById('api-key-status').textContent = k ? '✅ 입력됨' : '미입력';
+    document.getElementById('api-key-status').style.color = k ? '#4ade80' : 'rgba(255,255,255,0.4)';
+    this.toast({ko:'🔑 API 키 저장됨',en:'🔑 API key saved',ja:'🔑 APIキー保存済',zh:'🔑 API密钥已保存'}[this.lang]);
+    // 저장 후 자동 잠금
+    ApiLock.lock();
+  },
     this.apiKey = k;
     localStorage.setItem('cpos_api_key', k);
     this.toast({ko:'🔑 API 키 저장됨',en:'🔑 API key saved',ja:'🔑 APIキー保存済',zh:'🔑 API密钥已保存'}[this.lang]);
@@ -1226,9 +1365,114 @@ const App = {
   },
 };
 
+// ── API 키 잠금 모듈 ──────────────────────────────────
+const ApiLock = {
+  PIN_KEY: 'cpos_api_pin',
+  _locked: true,
+  init() {
+    const pin = localStorage.getItem(this.PIN_KEY);
+    if (!pin) {
+      // PIN 미설정 → 잠금 없이 사용, 배지 숨김
+      this._locked = false;
+      const b = document.getElementById('api-lock-badge');
+      if (b) b.style.display = 'none';
+    } else {
+      this.lock();
+    }
+    // API 키 상태 표시
+    const k = localStorage.getItem('cpos_api_key') || '';
+    const st = document.getElementById('api-key-status');
+    if (st) { st.textContent = k ? '✅ 입력됨' : '미입력'; st.style.color = k ? '#4ade80' : 'rgba(255,255,255,0.4)'; }
+    if (k) { const inp = document.getElementById('api-key-input'); if (inp) inp.value = k; }
+  },
+  lock() {
+    this._locked = true;
+    const sec = document.getElementById('api-key-section');
+    const badge = document.getElementById('api-lock-badge');
+    if (sec) sec.classList.add('api-locked');
+    if (badge) { badge.textContent = '🔒 잠김'; badge.className = 'api-lock-badge locked'; }
+  },
+  unlock() {
+    this._locked = false;
+    const sec = document.getElementById('api-key-section');
+    const badge = document.getElementById('api-lock-badge');
+    if (sec) sec.classList.remove('api-locked');
+    if (badge) { badge.textContent = '🔓 수정 가능'; badge.className = 'api-lock-badge unlocked'; }
+  },
+  toggle() {
+    if (!this._locked) { this.lock(); return; }
+    const pin = localStorage.getItem(this.PIN_KEY);
+    if (!pin) {
+      // PIN 없으면 바로 해제
+      this.unlock(); return;
+    }
+    // PIN 모달 열기
+    document.getElementById('lock-modal').classList.add('open');
+    document.getElementById('lock-pin-input').value = '';
+    document.getElementById('lock-pin-error').textContent = '';
+    setTimeout(() => document.getElementById('lock-pin-input').focus(), 100);
+  },
+  confirm() {
+    const entered = document.getElementById('lock-pin-input').value.trim();
+    const saved = localStorage.getItem(this.PIN_KEY);
+    if (entered === saved) {
+      this.closeModal();
+      this.unlock();
+    } else {
+      document.getElementById('lock-pin-error').textContent = '❌ PIN이 틀렸습니다';
+      document.getElementById('lock-pin-input').value = '';
+    }
+  },
+  closeModal() {
+    document.getElementById('lock-modal').classList.remove('open');
+  },
+  setPin(pin) {
+    localStorage.setItem(this.PIN_KEY, pin);
+    this.lock();
+  }
+};
+
+// PIN 입력창 Enter 키 지원
+document.addEventListener('DOMContentLoaded', () => {
+  const pinInp = document.getElementById('lock-pin-input');
+  if (pinInp) pinInp.addEventListener('keydown', e => { if (e.key === 'Enter') ApiLock.confirm(); });
+  ApiLock.init();
+});
+
+// data-action 이벤트 핸들러 (구버전 패턴 연결)
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-action]');
+  if (!el) return;
+  const act = el.dataset.action;
+  if (act === 'close-settings') App.closeSettings();
+  else if (act === 'toggle-acc') {
+    const sec = document.getElementById(el.dataset.acc);
+    if (sec) sec.classList.toggle('open');
+  }
+  else if (act === 'set-lang') {
+    const lang = el.dataset.lang;
+    document.querySelectorAll('[data-action="set-lang"]').forEach(c => c.classList.remove('picked'));
+    el.classList.add('picked');
+    if (App.setLang) App.setLang(lang);
+  }
+  else if (act === 'voice-on') { App.setTTS && App.setTTS(true); document.getElementById('tts-on').classList.add('picked'); document.getElementById('tts-off').classList.remove('picked'); }
+  else if (act === 'voice-off') { App.setTTS && App.setTTS(false); document.getElementById('tts-off').classList.add('picked'); document.getElementById('tts-on').classList.remove('picked'); }
+  else if (act === 'mic-on') { document.getElementById('mic-on').classList.add('picked'); document.getElementById('mic-off').classList.remove('picked'); }
+  else if (act === 'mic-off') { document.getElementById('mic-off').classList.add('picked'); document.getElementById('mic-on').classList.remove('picked'); }
+  else if (act === 'gesture-on') { App.setGesture && App.setGesture(true); document.getElementById('gesture-on').classList.add('picked'); document.getElementById('gesture-off').classList.remove('picked'); }
+  else if (act === 'gesture-off') { App.setGesture && App.setGesture(false); document.getElementById('gesture-off').classList.add('picked'); document.getElementById('gesture-on').classList.remove('picked'); }
+  else if (act === 'save-api-key') { App.saveApiKey && App.saveApiKey(); }
+  else if (act === 'share-app') { App.shareApp && App.shareApp(); }
+  else if (act === 'show-qr') { App.showQR && App.showQR(); }
+  else if (act === 'open-lounge') { App.openLounge && App.openLounge(); }
+  else if (act === 'open-host') { App.openHost && App.openHost(); }
+  else if (act === 'toggle-qa') { App.toggleQA && App.toggleQA(); }
+});
+
 window.addEventListener('keydown', e => {
   if (e.code === 'Escape') {
     document.getElementById('settings-panel').classList.remove('open');
+    ApiLock.closeModal();
     App.closeMic();
     App.closePip();
     App.closeGuide();
