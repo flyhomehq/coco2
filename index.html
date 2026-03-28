@@ -1322,11 +1322,6 @@ const App = {
     // 저장 후 자동 잠금
     ApiLock.lock();
   },
-    this.apiKey = k;
-    localStorage.setItem('cpos_api_key', k);
-    this.toast({ko:'🔑 API 키 저장됨',en:'🔑 API key saved',ja:'🔑 APIキー保存済',zh:'🔑 API密钥已保存'}[this.lang]);
-    document.getElementById('settings-panel').classList.remove('open');
-  },
 
   setTTS(on) {
     this.ttsOn = on;
